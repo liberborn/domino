@@ -29,6 +29,7 @@ var Domino = {
             squareNumbers : [0 , 0],
 
             setSquareNumbers : function (nums) {
+                // console.log('set : ' + nums[0] + ', ' + nums[1]);
                 this.squareNumbers[0] = nums[0];
                 this.squareNumbers[1] = nums[1];
             },
@@ -124,9 +125,9 @@ var Domino = {
 
                 for (var i = 0, m = dots.length; i < m; i++) {
                     if (squareMap[i]) {
-                        $(dots[i]).show();
+                        $(dots[i]).css('visibility', 'visible');
                     } else {
-                        $(dots[i]).hide();
+                        $(dots[i]).css('visibility', 'hidden');
                     }
                 }
             },
@@ -254,7 +255,7 @@ var Domino = {
             var model = this.getModel(),
                 view = this.getView();
 
-            // console.log(model.squareNumbers);
+            // console.log('refresh : ' + model.squareNumbers);
             view.update(model);
         },
 

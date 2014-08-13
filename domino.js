@@ -86,7 +86,7 @@ var Domino = {
         return {
 
             /**
-             * squareDotMap describes dots visibility for each number
+             * squareDotMap : describes dots visibility for each number
              * there are 9 dots (3x3) on each square tile
              * 
              * @type {Object}
@@ -99,6 +99,47 @@ var Domino = {
                 4 : [ '0', ' ', '0',      ' ', ' ', ' ',      '0', ' ', '0'],
                 5 : [ '0', ' ', '0',      ' ', '0', ' ',      '0', ' ', '0'],
                 6 : [ '0', ' ', '0',      '0', ' ', '0',      '0', ' ', '0'],
+            },
+
+            /**
+             * squareDotMapHorizontal : square dot map for horizontal position
+             * based on squareDotMap (e.g. dot #0 becomes dot #6)
+             * 
+             * @type {Object}
+             */
+            squareDotMapHorizontal : {
+                0 : 6,
+                1 : 3,
+                2 : 0,
+                3 : 7,
+                4 : 4,
+                5 : 1,
+                6 : 8,
+                7 : 5,
+                8 : 2
+            },
+
+            /**
+             * getSquareDotList : get dot list based on domino position
+             * 
+             * @param  {Number} num
+             * @param  {String} type domino position
+             * @return {Array}  dot list
+             */
+            getSquareDotList : function (num, type) {
+                var squareDotList = this.squareDotMap[num],
+                    squareDotListHorizontal = [],
+                    dotHorizontal = null;
+
+                if (type === 'vertical') {
+                    return squareDotList;
+                } else {
+                    for (var i = 0, m = squareDotList.length; i < m; i++) {
+                        dotHorizontal = this.squareDotMapHorizontal[i];
+                        squareDotListHorizontal.push(squareDotList[dotHorizontal]);
+                    }
+                    return squareDotListHorizontal;
+                }
             },
 
             /**
@@ -130,12 +171,12 @@ var Domino = {
              * @param {Object} square jquery object
              * @param {Number} num    number to show on tile
              */
-            setSquareNumber : function (square, num) {
+            setSquareNumber : function (square, num, type) {
                 var dots = square.find('.circle'),
-                    squareDotList = this.squareDotMap[num];
+                    squareDotList = this.getSquareDotList(num, type);
 
                 for (var i = 0, m = dots.length; i < m; i++) {
-                    if (this.isSquareDotVisible(squareDotList, i)) {
+                    if (this.isSquareDotVisible(squareDotList, i, type)) {
                         $(dots[i]).css('visibility', 'visible');
                     } else {
                         $(dots[i]).css('visibility', 'hidden');
@@ -148,12 +189,12 @@ var Domino = {
              * 
              * @param {Array} squareNumbers
              */
-            setDominoSquares : function (squareNumbers) {
+            setDominoSquares : function (squareNumbers, type) {
                 var squareFirstView = $('div.square-0'),
                     squareSecondView = $('div.square-1');
 
-                this.setSquareNumber(squareFirstView, squareNumbers[0]);
-                this.setSquareNumber(squareSecondView, squareNumbers[1]);
+                this.setSquareNumber(squareFirstView, squareNumbers[0], type);
+                this.setSquareNumber(squareSecondView, squareNumbers[1], type);
             },
 
             /**
@@ -165,7 +206,7 @@ var Domino = {
                 var me = this;
 
                 me.setDominoPosition(model.type);
-                me.setDominoSquares(model.squareNumbers);
+                me.setDominoSquares(model.squareNumbers, model.type);
             }
         }
     },

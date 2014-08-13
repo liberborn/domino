@@ -86,19 +86,30 @@ var Domino = {
         return {
 
             /**
-             * squareMap describes dots visibility for each number
+             * squareDotMap describes dots visibility for each number
              * there are 9 dots (3x3) on each square tile
              * 
              * @type {Object}
              */
-            squareMap : { // show dots map
-                0 : [false, false, false, false, false, false, false, false, false],
-                1 : [false, false, false, false, true,  false, false, false, false],
-                2 : [false, false, true,  false, false, false, true,  false, false],
-                3 : [false, false, true,  false, true,  false, true,  false, false],
-                4 : [true,  false, true,  false, false, false, true,  false, true ],
-                5 : [true,  false, true,  false, true,  false, true,  false, true ],
-                6 : [true,  false, true,  true,  false, true,  true,  false, true ]
+            squareDotMap : { // show dots map
+                0 : [ ' ', ' ', ' ',      ' ', ' ', ' ',      ' ', ' ', ' '],
+                1 : [ ' ', ' ', ' ',      ' ', '0', ' ',      ' ', ' ', ' '],
+                2 : [ ' ', ' ', '0',      ' ', ' ', ' ',      '0', ' ', ' '],
+                3 : [ ' ', ' ', '0',      ' ', '0', ' ',      '0', ' ', ' '],
+                4 : [ '0', ' ', '0',      ' ', ' ', ' ',      '0', ' ', '0'],
+                5 : [ '0', ' ', '0',      ' ', '0', ' ',      '0', ' ', '0'],
+                6 : [ '0', ' ', '0',      '0', ' ', '0',      '0', ' ', '0'],
+            },
+
+            /**
+             * isSquareDotVisible : check if dot is visible ('0') or hidden ('')
+             * 
+             * @param  {Array}  squareDotList list from squareDotMap based on selected number
+             * @param  {Number} i dot position in square dot list
+             * @return {Boolean}
+             */
+            isSquareDotVisible : function (squareDotList, i) {
+                return squareDotList[i] === '0' ? true : false;
             },
 
             setDominoPosition : function (type) {
@@ -121,10 +132,10 @@ var Domino = {
              */
             setSquareNumber : function (square, num) {
                 var dots = square.find('.circle'),
-                    squareMap = this.squareMap[num];
+                    squareDotList = this.squareDotMap[num];
 
                 for (var i = 0, m = dots.length; i < m; i++) {
-                    if (squareMap[i]) {
+                    if (this.isSquareDotVisible(squareDotList, i)) {
                         $(dots[i]).css('visibility', 'visible');
                     } else {
                         $(dots[i]).css('visibility', 'hidden');
